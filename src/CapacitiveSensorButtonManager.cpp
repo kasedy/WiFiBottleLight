@@ -1,12 +1,16 @@
 #include "CapacitiveSensorButtonManager.h"
 
+#include <ESP8266React.h>
+
 using namespace std::placeholders;
 
 CapacitiveSensorButtonManager::CapacitiveSensorButtonManager(uint8_t sendPin, 
                                                              uint8_t receivePin, 
-                                                             LightControllerService* lightControllerService) :
+                                                             LightControllerService* lightControllerService,
+                                                             ESP8266React* esp8266react) :
     capacitiveSensorButton(sendPin, receivePin, std::bind(&CapacitiveSensorButtonManager::handler, this, _1, _2)),
-    lightController(lightControllerService->get()) {
+    lightController(lightControllerService->get()),
+    esp8266react(esp8266react) {
 }
 
 void CapacitiveSensorButtonManager::handler(uint8_t numberClicks, CapacitiveSensorButton::EventType eventType) {
@@ -35,10 +39,7 @@ void CapacitiveSensorButtonManager::onDoubleClickHandler() {
 }
 
 void CapacitiveSensorButtonManager::onMultipleClicksHandler() {
-  // TODO: ESP8266React should provide factory reset
-  WiFi.disconnect(true);
-  delay(200);
-  ESP.reset();
+  esp8266react->factoryReset();
 }
 
 void CapacitiveSensorButtonManager::onLongPressHandler(bool isFirst) {
