@@ -1,62 +1,47 @@
 import React, { Component } from 'react';
-import { ValidatorForm } from 'react-material-ui-form-validator';
 
-import { Typography, Box, Switch } from '@material-ui/core';
-import { WEB_SOCKET_ROOT } from '../api';
-import { WebSocketControllerProps, WebSocketFormLoader, WebSocketFormProps, webSocketController } from '../components';
-import { SectionContent, BlockFormControlLabel } from '../components';
+import { Paper, Typography } from '@material-ui/core';
+import { LIGHT_SETTINGS_WEBSOCKET_ENDPOINT, PROJECT_NAME } from '../api';
+import { WebSocketControllerProps, WebSocketFormLoader, webSocketController } from '../components';
+import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 
 import { LightState } from './types';
+import LightStateSocketControllerForm from './LightStateSocketControllerForm';
 
-export const LIGHT_SETTINGS_WEBSOCKET_URL = WEB_SOCKET_ROOT + "lightState";
+const styles = (theme: Theme) => createStyles({
+  content: {
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "column",
+    textAlign: "center",
+    padding: theme.spacing(2),
+    margin: theme.spacing(3),
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    maxWidth: theme.breakpoints.values.sm,
+  },
+});
 
-type LightStateWebSocketControllerProps = WebSocketControllerProps<LightState>;
+type LightStateWebSocketControllerProps = WebSocketControllerProps<LightState> & WithStyles<typeof styles>;
 
-class LightStateWebSocketController extends Component<LightStateWebSocketControllerProps> {
+class LightStateSocketController extends Component<LightStateWebSocketControllerProps> {
 
   render() {
+    const { classes, ...rest } = this.props;
     return (
-      <SectionContent title='WebSocket Controller' titleGutter>
+      <Paper className={classes.content}>
+        <Typography variant="h4" gutterBottom>
+          {PROJECT_NAME}
+        </Typography>
         <WebSocketFormLoader
-          {...this.props}
+          {...rest}
           render={props => (
-            <LightStateWebSocketControllerForm {...props} />
+              <LightStateSocketControllerForm {...props} />
           )}
         />
-      </SectionContent>
+      </Paper>
     )
   }
-
 }
 
-export default webSocketController(LIGHT_SETTINGS_WEBSOCKET_URL, 100, LightStateWebSocketController);
-
-type LightStateWebSocketControllerFormProps = WebSocketFormProps<LightState>;
-
-function LightStateWebSocketControllerForm(props: LightStateWebSocketControllerFormProps) {
-  const { data, saveData, setData } = props;
-
-  const changeLedOn = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setData({ led_on: event.target.checked }, saveData);
-  }
-
-  return (
-    <ValidatorForm onSubmit={saveData}>
-      <Box bgcolor="primary.main" color="primary.contrastText" p={2} mt={2} mb={2}>
-        <Typography variant="body1">
-          The switch below controls the LED via the WebSocket. It will automatically update whenever the LED state changes.
-        </Typography>
-      </Box>
-      <BlockFormControlLabel
-        control={
-          <Switch
-            checked={data.led_on}
-            onChange={changeLedOn}
-            color="primary"
-          />
-        }
-        label="LED State?"
-      />
-    </ValidatorForm>
-  );
-}
+export default webSocketController(LIGHT_SETTINGS_WEBSOCKET_ENDPOINT, 100, withStyles(styles)(LightStateSocketController));

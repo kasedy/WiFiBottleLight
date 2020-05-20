@@ -27,3 +27,7 @@ export interface MqttSettings {
   clean_session: boolean;
   max_topic_length: number;
 }
+
+export interface HomeAssistantSettings {
+  name: string;
+}

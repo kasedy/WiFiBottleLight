@@ -1,8 +1,12 @@
 export interface LightState {
-  led_on: boolean;
+  state: boolean;
+  brightness: number;
+  speed?: number;
+  effect?: any;
+  effect_list?: any;
 }
 
-export interface LightMqttSettings { 
+export interface LightBrokerSettings { 
   unique_id : string;
   name: string;
   mqtt_path : string;

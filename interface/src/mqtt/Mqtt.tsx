@@ -7,6 +7,7 @@ import { AuthenticatedContextProps, withAuthenticatedContext, AuthenticatedRoute
 import { MenuAppBar } from '../components';
 import MqttStatusController from './MqttStatusController';
 import MqttSettingsController from './MqttSettingsController';
+import HomeAssistantSettingsController from './HomeAssistantSettingsController';
 
 type MqttProps = AuthenticatedContextProps & RouteComponentProps;
 
@@ -19,14 +20,16 @@ class Mqtt extends Component<MqttProps> {
   render() {
     const { authenticatedContext } = this.props;
     return (
-      <MenuAppBar sectionTitle="MQTT">
+      <MenuAppBar sectionTitle="Home Assistant">
         <Tabs value={this.props.match.url} onChange={this.handleTabChange} variant="fullWidth">
           <Tab value="/mqtt/status" label="MQTT Status" />
           <Tab value="/mqtt/settings" label="MQTT Settings" disabled={!authenticatedContext.me.admin} />
+          <Tab value="/mqtt/ha" label="Home Assistant Settings" disabled={!authenticatedContext.me.admin} />
         </Tabs>
         <Switch>
           <AuthenticatedRoute exact path="/mqtt/status" component={MqttStatusController} />
           <AuthenticatedRoute exact path="/mqtt/settings" component={MqttSettingsController} />
+          <AuthenticatedRoute exact path="/mqtt/ha" component={HomeAssistantSettingsController} />
           <Redirect to="/mqtt/status" />
         </Switch>
       </MenuAppBar>
