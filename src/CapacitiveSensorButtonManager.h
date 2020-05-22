@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ESP8266React.h>
+
 #include "LightControllerService.h"
 #include "CapacitiveSensorButton.h"
 

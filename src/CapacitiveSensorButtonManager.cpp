@@ -1,7 +1,5 @@
 #include "CapacitiveSensorButtonManager.h"
 
-#include <ESP8266React.h>
-
 using namespace std::placeholders;
 
 CapacitiveSensorButtonManager::CapacitiveSensorButtonManager(uint8_t sendPin, 
