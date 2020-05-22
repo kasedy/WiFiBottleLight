@@ -13,7 +13,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import SettingsInputAntennaIcon from '@material-ui/icons/SettingsInputAntenna';
-import DeviceHubIcon from '@material-ui/icons/DeviceHub';
+import HomeAssistantIcon from 'mdi-react/HomeAssistantIcon';
 import LockIcon from '@material-ui/icons/Lock';
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -139,9 +139,9 @@ class MenuAppBar extends React.Component<MenuAppBarProps, MenuAppBarState> {
           </ListItem>
           <ListItem to='/mqtt/' selected={path.startsWith('/mqtt/')} button component={Link}>
             <ListItemIcon>
-              <DeviceHubIcon />
+              <HomeAssistantIcon />
             </ListItemIcon>
-            <ListItemText primary="MQTT" />
+            <ListItemText primary="Home Assistant" />
           </ListItem>          
           <ListItem to='/security/' selected={path.startsWith('/security/')} button component={Link} disabled={!authenticatedContext.me.admin}>
             <ListItemIcon>
