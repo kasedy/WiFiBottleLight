@@ -7,8 +7,9 @@ SecuritySettingsService::SecuritySettingsService(AsyncWebServer* server, FS* fs)
                   server,
                   SECURITY_SETTINGS_PATH,
                   this),
-    _fsPersistence(SecuritySettings::serialize, SecuritySettings::deserialize, this, fs, SECURITY_SETTINGS_FILE) {
-  addUpdateHandler([&](String originId) { configureJWTHandler(); }, false);
+    _fsPersistence(SecuritySettings::serialize, SecuritySettings::deserialize, this, fs, SECURITY_SETTINGS_FILE),
+    _jwtHandler(FACTORY_JWT_SECRET) {
+  addUpdateHandler([&](const String& originId) { configureJWTHandler(); }, false);
 }
 
 void SecuritySettingsService::begin() {
@@ -51,7 +52,7 @@ Authentication SecuritySettingsService::authenticateJWT(String& jwt) {
   return Authentication();
 }
 
-Authentication SecuritySettingsService::authenticate(String& username, String& password) {
+Authentication SecuritySettingsService::authenticate(const String& username, const String& password) {
   for (User _user : _state.users) {
     if (_user.username == username && _user.password == password) {
       return Authentication(_user);
