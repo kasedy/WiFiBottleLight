@@ -12,12 +12,13 @@ static void homeAssistantMqttSettingsSerialize(HomeAssistantMqttSettings& settin
   DBG("Serialize called with %s\n", settings.deviceDisplayName.c_str());
 }
 
-static void homeAssistantMqttSettingsDeserialize(JsonObject& root, HomeAssistantMqttSettings& settings) {
+static StateUpdateResult homeAssistantMqttSettingsDeserialize(JsonObject& root, HomeAssistantMqttSettings& settings) {
   settings.deviceDisplayName = root["name"] | "";
   if (settings.deviceDisplayName.isEmpty()) {
     settings.deviceDisplayName = F("Cointreau Bottle");
   }
   DBG("Deserialize called with %s\n", settings.deviceDisplayName.c_str());
+  return StateUpdateResult::CHANGED;
 }
 
 

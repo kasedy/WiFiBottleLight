@@ -32,7 +32,7 @@ static void homeAssistantMqttMessageSerialize(LightController& lightController, 
   doc[FPSTR(WHITE_VALUE)] = lightController.getAnimationSpeed();
 }
 
-static void homeAssistantMqttMessageDeserialize(JsonObject& doc, LightController& lightController) {
+static StateUpdateResult homeAssistantMqttMessageDeserialize(JsonObject& doc, LightController& lightController) {
   const char* state = doc[FPSTR(STATE)] | "";
   if (strcmp_P(state, CONFIG_MQTT_PAYLOAD_ON) == 0) {
     lightController.setStateOn(true);
@@ -45,6 +45,7 @@ static void homeAssistantMqttMessageDeserialize(JsonObject& doc, LightController
   if (doc[FPSTR(EFFECT)].is<const char*>()) {
     lightController.setAnimationByName(doc[FPSTR(EFFECT)]);
   }
+  return lightController.getAndResetDirtyFlag() ? StateUpdateResult::CHANGED : StateUpdateResult::UNCHANGED;
 }
 
 static String getSubscribeTopic() {

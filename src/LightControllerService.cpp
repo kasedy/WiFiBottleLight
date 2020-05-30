@@ -22,13 +22,14 @@ static void webSocketSerializer(LightController& lightController, JsonObject& js
   }
 }
 
-static void webSocketDeserializer(JsonObject& json, LightController& lightController) {
+static StateUpdateResult webSocketDeserializer(JsonObject& json, LightController& lightController) {
   lightController.setStateOn(json[FPSTR(STATE_PARAM)] | lightController.isOn());
   lightController.setLightBrightness(json[FPSTR(BRIGHTNESS_PARAM)] | lightController.getLightBrightness());
   if (lightController.supportsAnimation()) {
     lightController.setAnimationSpeed(json[FPSTR(SPEED_PARAM)] | lightController.getAnimationSpeed());
     lightController.setAnimationByIndex(json[FPSTR(EFFECT_PARAM)] | lightController.getCurrentAnimationIndex());
   }
+  return lightController.getAndResetDirtyFlag() ? StateUpdateResult::CHANGED : StateUpdateResult::UNCHANGED;
 }
 
 LightControllerService::LightControllerService(
