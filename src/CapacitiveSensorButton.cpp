@@ -30,15 +30,18 @@ void CapacitiveSensorButton::loop() {
     return;
   }
 
+  uint32_t now = millis();
   long sensorTime = cs.capacitiveSensor(NUM_SAMPLES);
   if (sensorTime < 0) {
-    DBG("Failed to read capacitive sensor. Error code = %ld\n", sensorTime);
+    if (now - lastDebug >= 1000) {
+      DBG("Failed to read capacitive sensor. Error code = %ld\n", sensorTime);
+      lastDebug = now;
+    }
     return;
   }
   touchSensorData.addMeasurement(sensorTime);
   debugTouchSensorData.addMeasurement(sensorTime);
 
-  uint32_t now = millis();
   if (now - lastDebug >= 200) {
     DBG_INFO("min: %-4d avg: %-4d max: %-4d\n", 
         debugTouchSensorData.minValue, 
