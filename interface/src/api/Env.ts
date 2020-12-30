@@ -20,5 +20,10 @@ function calculateWebSocketRoot(webSocketPath: string) {
     }
     const location = window.location;
     const webProtocol = location.protocol === "https:" ? "wss:" : "ws:";
-    return webProtocol + "//" + location.host + webSocketPath;
+    // Workaround to make sockets work in iOS captive portal browser
+    let host = location.host;
+    if (location.host === "captive.apple.com" && location.protocol === "http:") {
+        host = "192.168.4.1"
+    }
+    return webProtocol + "//" + host + webSocketPath;
 }
