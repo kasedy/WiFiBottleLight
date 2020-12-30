@@ -16,7 +16,7 @@ class MqttSettingsController extends Component<MqttSettingsControllerProps> {
 
   render() {
     return (
-      <SectionContent title="MQTT Settings" titleGutter>
+      <SectionContent title="MQTT Connection Settings" titleGutter>
         <RestFormLoader
           {...this.props}
           render={formProps => <MqttSettingsForm {...formProps} />}
