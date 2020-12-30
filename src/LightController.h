@@ -70,22 +70,18 @@ public:
       return;
     }
     stateOn = newStateOn;
-    stateOnChanged = true;
+    dirtyFlag = stateOnChanged = true;
   }
 
-  // Dirty flags that reset every loop() call
+  // Dirty flags that reset every loop() call. Help Annimations to optimize calculations
+  // by limiting only to properties that changed.
   inline bool isEffectChanged() const { return effectChanged; }
   inline bool isMaxBrightensChanged() const { return lightBrightnessChanged; }
   inline bool isAnimationSpeedChanged() const { return animationSpeedChanged; }
   inline bool isStateOnChanged() const { return stateOnChanged; }
-  inline bool isChanged() const {
-    return isMaxBrightensChanged() 
-        || isStateOnChanged() 
-        || isEffectChanged() 
-        || isAnimationSpeedChanged();
-  }
 
-  // Manual diry flag to track change
+  // Manual diry flag to track change. Indicates that settings was changed internaly and 
+  // should be distributed through StatefulService subscription system.
   inline void resetDirtyFlag() { dirtyFlag = false; }
   inline bool isDirty() const { return dirtyFlag; }
   inline bool getAndResetDirtyFlag() { 
